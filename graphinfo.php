@@ -1,12 +1,15 @@
 <?php
 
 $graphs = array(
-  "http://www.openlinksw.com/schemas/virtrdf#"
+  "http://linkedchemistry.info/chembl/"
 );
 
 $graphInfo = array(
-  "http://www.openlinksw.com/schemas/virtrdf#" => array(
-    'http://www.openlinksw.com/schemas/virtrdf#' => 'http://localhost:8893/sparql',
+  "http://linkedchemistry.info/chembl/" => array(
+    'name' => 'ChEMBL-RDF by LinkedChemistry.info',
+    'provider' => 'EMBL-EBI',
+    'licenseName' => 'CC-BY-SA',
+    'licenseURL' => 'http://creativecommons.org/licenses/by-sa/3.0/',
   )
 );
 

@@ -4,6 +4,7 @@ include_once("arc2/ARC2.php");
 include_once("graphinfo.php");
 
 $inchi = $_GET["inchi"];
+$inchikey = $_GET["inchikey"];
 
 /* configuration */ 
 $config = array(
@@ -14,38 +15,46 @@ $config = array(
 /* instantiation */
 $store = ARC2::getRemoteStore($config);
 
+// cheminf:CHEMINF_000200 [ a cheminf:CHEMINF_000059 ; cheminf:SIO_000300 \"?inchikey\" . ]
+
 $q = <<<SPARQL
+PREFIX cheminf: <http://semanticscience.org/resource/>
 SELECT ?graph ?p ?o WHERE {
   GRAPH ?graph {
-    ?mol cheminf:CHEMINF_000200 [ a cheminf:CHEMINF_000113 ; cheminf:SIO_000300 ?inchi . ]
+    ?mol cheminf:CHEMINF_000200 [ a cheminf:CHEMINF_000059 ; cheminf:SIO_000300 "$inchikey" ] ;
       ?p ?o .
   }
-} LIMIT 2
+}
 SPARQL;
 
 $rows = $store->query($q, 'rows');
 
 echo "<html>\n";
+echo "<head><title>$inchikey</title></head>\n";
+echo "<body>\n";
 
-echo "$rows";
+// echo "<pre>\n";
+// echo "$q\n";
+// echo "</pre>\n";
 
-echo "<pre>\n";
-print_r($rows);
-echo "</pre>\n";
+// echo "<pre>\n";
+// print_r($rows);
+// echo "</pre>\n";
 
 echo "<table>\n";
 foreach ($graphs as $graph) {
+  echo "<h4>" . $graphInfo[$graph]['name'] . "</h4>";
+  echo "<p>Provider: " . $graphInfo[$graph]['provider'] . "; license: <a href=\"" . $graphInfo[$graph]['licenseURL'] . "\">" . $graphInfo[$graph]['licenseName'] . "</a></p>";
   foreach ($rows as $row) {
     if ($row['graph'] == $graph) {
-      foreach (array_keys($row) as $key) {
-        echo "<tr>\n";
-        echo "<td>$key</td><td>" . $row[$key] . "</td>\n";
-        echo "</tr>\n";
-      }
+      echo "<tr>\n";
+        echo "<td>" . $row['p'] . "</td><td>" . $row['o'] . "</td>\n";
+      echo "</tr>\n";
     }
   }
 }
 echo "</table>\n";
+echo "</body>\n";
 echo "</html>\n";
 
 ?>
