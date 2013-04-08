@@ -2,6 +2,7 @@
 
 include_once("arc2/ARC2.php");
 include_once("graphinfo.php");
+include_once("labels.php");
 
 function startswith($haystack, $needle) {
     return substr($haystack, 0, strlen($needle)) === $needle;
@@ -53,10 +54,16 @@ foreach ($graphs as $graph) {
     if ($row['graph'] == $graph) {
       if ($row['p'] != 'http://semanticscience.org/resource/CHEMINF_000200') {
         echo "<tr>\n";
-          echo "<td>" . $row['p'] . "</td>\n";
-          $literal = $row['o'];
-          if (startswith($literal, "http://")) {
-            echo "<td><a href=\"$literal\">$literal</a></td>\n";
+          $predicate = $row['p'];
+          if ($labels[$predicate]) {
+            $predicate = $labels[$predicate];
+          }
+          $object = $row['o'];
+
+          echo "<td>$predicate</td>\n";
+          $object = $row['o'];
+          if (startswith($object, "http://")) {
+            echo "<td><a href=\"$object\">$object</a></td>\n";
           } else {
             echo "<td>" . $row['o'] . "</td>\n";
           }
