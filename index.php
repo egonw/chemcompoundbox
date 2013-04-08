@@ -3,6 +3,10 @@
 include_once("arc2/ARC2.php");
 include_once("graphinfo.php");
 
+function startswith($haystack, $needle) {
+    return substr($haystack, 0, strlen($needle)) === $needle;
+}
+
 $inchi = $_GET["inchi"];
 $inchikey = $_GET["inchikey"];
 
@@ -47,9 +51,17 @@ foreach ($graphs as $graph) {
   echo "<p>Provider: " . $graphInfo[$graph]['provider'] . "; license: <a href=\"" . $graphInfo[$graph]['licenseURL'] . "\">" . $graphInfo[$graph]['licenseName'] . "</a></p>";
   foreach ($rows as $row) {
     if ($row['graph'] == $graph) {
-      echo "<tr>\n";
-        echo "<td>" . $row['p'] . "</td><td>" . $row['o'] . "</td>\n";
-      echo "</tr>\n";
+      if ($row['p'] != 'http://semanticscience.org/resource/CHEMINF_000200') {
+        echo "<tr>\n";
+          echo "<td>" . $row['p'] . "</td>\n";
+          $literal = $row['o'];
+          if (startswith($literal, "http://")) {
+            echo "<td><a href=\"$literal\">$literal</a></td>\n";
+          } else {
+            echo "<td>" . $row['o'] . "</td>\n";
+          }
+        echo "</tr>\n";
+      }
     }
   }
 }
