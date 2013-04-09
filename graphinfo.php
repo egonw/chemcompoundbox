@@ -4,6 +4,9 @@ $graphs = array(
   "http://linkedchemistry.info/chembl/"
 );
 
+$cczerographs = array(
+);
+
 $graphInfo = array(
   "http://linkedchemistry.info/chembl/" => array(
     'name' => 'ChEMBL-RDF by LinkedChemistry.info',

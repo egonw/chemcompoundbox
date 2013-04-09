@@ -10,6 +10,7 @@ function startswith($haystack, $needle) {
 
 $inchi = $_GET["inchi"];
 $inchikey = $_GET["inchikey"];
+$all = $_GET["all"];
 
 /* configuration */ 
 $config = array(
@@ -46,8 +47,13 @@ echo "<body>\n";
 // print_r($rows);
 // echo "</pre>\n";
 
+$graphsToReturn = $cczerographs;
+if ($all == "y") {
+  $graphsToReturn = $graphs;
+}
+
 echo "<table>\n";
-foreach ($graphs as $graph) {
+foreach ($graphsToReturn as $graph) {
   echo "<h4>" . $graphInfo[$graph]['name'] . "</h4>";
   echo "<p>Provider: " . $graphInfo[$graph]['provider'] . "; license: <a href=\"" . $graphInfo[$graph]['licenseURL'] . "\">" . $graphInfo[$graph]['licenseName'] . "</a></p>";
   foreach ($rows as $row) {
